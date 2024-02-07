@@ -5,13 +5,13 @@ const knex = require("knex")(require("../knexfile"));
 
 const allInventories = async (req, res) => {
   try {
-    // Fetch the whole inventories array with all keys and properties
-    const inventoriesArrWithAllKeys = await knex("warehouses")
+    // Fetch the whole inventories array with all properties
+    const inventoriesArrWithAllProp = await knex("warehouses")
       .join("inventories", "inventories.warehouse_id", "warehouses.id")
       .where({ warehouse_id: req.params.id });
 
-    // Filter our keys and properties that are required and return that new array
-    const inventoriesArrWithItemKeys = inventoriesArrWithAllKeys.map(
+    // Filter our properties that are required and return that new array
+    const inventoriesArrWithItemProp = inventoriesArrWithAllProp.map(
       (item) => ({
         id: item.id,
         item_name: item.item_name,
@@ -20,7 +20,7 @@ const allInventories = async (req, res) => {
         quantity: item.quantity,
       })
     );
-    res.status(200).json(inventoriesArrWithItemKeys);
+    res.status(200).json(inventoriesArrWithItemProp);
   } catch (error) {
     res.status(404).json({
       message: `Unable to retrieve inventories for warehouse with ID ${req.params.id}: ${error}!`,
@@ -44,6 +44,7 @@ const inventoriesById = async (req, res) => {
         message: `Inventory with ID${req.params.id} not found!`,
       });
     }
+
     // Return the first object found
     const inventoryObject = inventoryFound[0];
 
@@ -56,7 +57,8 @@ const inventoriesById = async (req, res) => {
     } else{
         inventoryObject.warehouse_name = 'Not found!';
     }
-    // Remove created_at and updated_at keys and properties and return that new Object
+    
+    // Remove created_at and updated_at properties and return that new Object
     const { warehouse_id, created_at, updated_at, ...filteredInventoryObject } =
       inventoryObject;
     res.status(200).json(filteredInventoryObject);
