@@ -47,8 +47,17 @@ const inventoriesById = async (req, res) => {
     // Return the first object found
     const inventoryObject = inventoryFound[0];
 
+    const fetchWarehousedetails = await knex("warehouses").where({
+        id: inventoryObject.warehouse_id,
+    }).first();
+
+    if(fetchWarehousedetails){
+        inventoryObject.warehouse_name = fetchWarehousedetails.warehouse_name;
+    } else{
+        inventoryObject.warehouse_name = 'Not found!';
+    }
     // Remove created_at and updated_at keys and properties and return that new Object
-    const { created_at, updated_at, ...filteredInventoryObject } =
+    const { warehouse_id, created_at, updated_at, ...filteredInventoryObject } =
       inventoryObject;
     res.status(200).json(filteredInventoryObject);
   } catch (error) {
