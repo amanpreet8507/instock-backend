@@ -69,7 +69,31 @@ const inventoriesById = async (req, res) => {
   }
 };
 
+// For -----> PUT /api/inventories/:id ************************************************************
+// FOR -----> API to PUT/EDIT an Inventory Item
+
+const editInventory = async(req, res) => {
+    try{
+        const {id , warehouse_id, item_name, description, category, status, quantity} = req.body;
+        if(!warehouse_id || !item_name || !description || !category || !status || !quantity){
+            return res.status(400).json({
+                message: "Please provide the missing properties for the user in the request",
+            });
+        }
+
+        const editedInventoryItem = await knex('inventories').where({id: req.params.id})
+        .update({id, warehouse_id, item_name, description, category, status, quantity})
+
+        res.status(200).json(editedInventoryItem);
+    } catch(error){
+        res.status(400).json({
+            message: `Unable to retrieve inventory with ID ${req.params.id}: ${error}!`,
+          })
+    }
+}
+
 module.exports = {
   allInventories,
   inventoriesById,
+  editInventory
 };
