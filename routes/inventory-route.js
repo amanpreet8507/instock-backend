@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const inventoryController = require("../contorllers/inventory-controller");
+const inventoryController = require("../controllers/inventory-controller");
 
 // FOR -----> GET /api/warehouses/:id/inventories
 router.route("/:id/inventories")
