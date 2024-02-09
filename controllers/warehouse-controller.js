@@ -1,13 +1,21 @@
 const knex = require("knex")(require("../knexfile"));
 
+/*Get list of all warehouses */
+
 const warehouseList = async (req, res) => {
   try {
     const allWarehouseData = await knex("warehouses");
-    res.status(200).json(allWarehouseData);
-  } catch (err) {
-    res.status(400).send(`Error in retrieving the warehouse list: ${err}`);
+    if (allWarehouseData.length > 0) {
+      res.status(200).json(allWarehouseData);
+    } else {
+      res.status(400).json(`Warehouse list is unavailable: ${error}`);
+    }
+  } catch (error) {
+    res.status(400).json(`Error in retrieving the warehouse list: ${error}`);
   }
 };
+
+/*Get warehouse details using Id */
 const warehouseListById = async (req, res) => {
   const selectedwarehouseData = await knex("warehouses").where({
     id: req.params.id,
@@ -20,10 +28,10 @@ const warehouseListById = async (req, res) => {
         .status(404)
         .json("Error in retrieving the selected warehouse information.");
     }
-  } catch (err) {
+  } catch (error) {
     res
       .status(400)
-      .json(`Error in retrieving the selected warehouse information: ${err}`);
+      .json(`Error in retrieving the selected warehouse information: ${error}`);
   }
 };
 
@@ -203,5 +211,5 @@ module.exports = {
   updateWarehouse,
   warehouseList,
   warehouseListById,
-  deleteWarehouse
+  deleteWarehouse,
 };
