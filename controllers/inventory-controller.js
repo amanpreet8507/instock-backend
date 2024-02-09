@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 const knex = require("knex")(require("../knexfile"));
 
 // FOR -----> GET /api/warehouses/:id/inventories ******************************************
@@ -10,7 +12,7 @@ const allInventories = async (req, res) => {
       .join("inventories", "inventories.warehouse_id", "warehouses.id")
       .where({ warehouse_id: req.params.id });
 
-    // Filter our properties that are required and return that new array
+    // Filter out properties that are required and return that new array
     const inventoriesArrWithItemProp = inventoriesArrWithAllProp.map(
       (item) => ({
         id: item.id,
@@ -30,7 +32,7 @@ const allInventories = async (req, res) => {
 
 
 // For -----> GET /api/inventories/:id ************************************************************
-// FOR -----> API to GET a Single Inventory Item
+// FOR -----> API to GET/FIND a Single Inventory Item
 
 const inventoriesById = async (req, res) => {
   try {
@@ -70,20 +72,20 @@ const inventoriesById = async (req, res) => {
 };
 
 // For -----> PUT /api/inventories/:id ************************************************************
-// FOR -----> API to PUT/EDIT an Inventory Item
+// FOR -----> API to PUT/UPDATE OR EDIT an Inventory Item
 
 const editInventory = async(req, res) => {
-  try{
-      // Destructuring values coming from req.body
-      const {id , warehouse_id, item_name, description, category, status, quantity} = req.body;
-      
-      // Checking if every property exits in req.body to updat the whole object
-      if(!warehouse_id || !item_name || !description || !category || !status || !quantity){
-          return res.status(400).json({
-              message: "Please provide the missing properties for the user in the request",
-          });
-      }
+  // Destructuring values coming from req.body
+  const {id , warehouse_id, item_name, description, category, status, quantity} = req.body;
 
+  // Checking if every property exits in req.body to updat the whole object
+  if(!warehouse_id || !item_name || !description || !category || !status || !quantity){
+      return res.status(400).json({
+          message: "Please provide the missing properties for the user in the request",
+      });
+  }
+  
+  try{
       // Sending the response or updating the whole object
       const editedInventoryItem = await knex('inventories').where({id: req.params.id})
       .update({id, warehouse_id, item_name, description, category, status, quantity})
@@ -96,8 +98,71 @@ const editInventory = async(req, res) => {
   }
 }
 
+// For -----> POST /api/inventories/:id ************************************************************
+// FOR -----> API to POST/INSERT or ADD an Inventory Item
+
+const postInventory = async (req, res) => {
+  try {
+    // Destructuring values coming from req.body
+    const { warehouse_id, item_name, description, category, status, quantity } = req.body;
+
+    // Checking if all properties exists in req.body to update the whole object
+    if (!warehouse_id || !item_name || !description || !category || !status || !quantity) {
+      return res.status(400).json({
+        message: "Please provide all properties for the inventory in the request",
+      });
+    }
+
+    // Inserting the new inventory into the knex
+    const newInventory = await knex('inventories').insert({
+      warehouse_id,
+      item_name,
+      description,
+      category,
+      status,
+      quantity: parseInt(quantity)
+    });
+
+    // ID of the new inventory created
+    const newInventoryId = newInventory[0];
+
+    // Retrieving the created inventory from the database
+    const createdInventory = await knex('inventories').where({ id: newInventoryId }).first();
+
+    res.status(200).json(createdInventory);
+  } catch (error) {
+    res.status(400).json({
+      message: `Unable to post inventory: ${error}`,
+    });
+  }
+};
+
+// For -----> DELETE /api/inventories/:id ************************************************************
+// FOR -----> API to DELETE/REMOVE an Inventory Item
+
+const deleteInventory = async (req, res) => {
+  try{
+    // Get the inventory with id from params and delete it
+    const inventoryDelete = await knex("inventories").where({ id: req.params.id }).delete();
+
+    if( inventoryDelete===0 ) {
+      return res.status(404).json({message: `Inventory with ID ${req.params.id} not found`});
+    }
+
+    // No Content response
+    res.sendStatus(204)
+
+  }catch(error){
+    response.status(400).json({
+      message: `Unable to delete inventory with id ${req.params.id}: ${error}`
+    })
+  }
+}
+
 module.exports = {
   allInventories,
   inventoriesById,
-  editInventory
+  editInventory,
+  postInventory,
+  deleteInventory
 };
