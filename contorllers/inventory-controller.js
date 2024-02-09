@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 const knex = require("knex")(require("../knexfile"));
 
 // FOR -----> GET /api/warehouses/:id/inventories ******************************************
@@ -10,7 +12,7 @@ const allInventories = async (req, res) => {
       .join("inventories", "inventories.warehouse_id", "warehouses.id")
       .where({ warehouse_id: req.params.id });
 
-    // Filter our properties that are required and return that new array
+    // Filter out properties that are required and return that new array
     const inventoriesArrWithItemProp = inventoriesArrWithAllProp.map(
       (item) => ({
         id: item.id,
@@ -30,7 +32,7 @@ const allInventories = async (req, res) => {
 
 
 // For -----> GET /api/inventories/:id ************************************************************
-// FOR -----> API to GET a Single Inventory Item
+// FOR -----> API to GET/FIND a Single Inventory Item
 
 const inventoriesById = async (req, res) => {
   try {
@@ -70,7 +72,7 @@ const inventoriesById = async (req, res) => {
 };
 
 // For -----> PUT /api/inventories/:id ************************************************************
-// FOR -----> API to PUT/EDIT an Inventory Item
+// FOR -----> API to PUT/UPDATE OR EDIT an Inventory Item
 
 const editInventory = async(req, res) => {
   // Destructuring values coming from req.body
@@ -135,9 +137,32 @@ const postInventory = async (req, res) => {
   }
 };
 
+// For -----> DELETE /api/inventories/:id ************************************************************
+// FOR -----> API to DELETE/REMOVE an Inventory Item
+
+const deleteInventory = async (req, res) => {
+  try{
+    // Get the inventory with id from params and delete it
+    const inventoryDelete = await knex("inventories").where({ id: req.params.id }).delete();
+
+    if( inventoryDelete===0 ) {
+      return res.status(404).json({message: `Inventory with ID ${req.params.id} not found`});
+    }
+
+    // No Content response
+    res.sendStatus(204).json(`Inventory with ID ${req.params.id} deleted successfully!`);
+    
+  }catch(error){
+    response.status(400).json({
+      message: `Unable to delete inventory with id ${req.params.id}: ${error}`
+    })
+  }
+}
+
 module.exports = {
   allInventories,
   inventoriesById,
   editInventory,
   postInventory,
+  deleteInventory
 };
