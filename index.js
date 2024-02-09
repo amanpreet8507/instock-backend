@@ -1,3 +1,4 @@
+// imports
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -8,14 +9,18 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5050;
 
-// use routes
+// Use routes
 const inventoryRoutes = require("./routes/inventory-route");
-app.use("/warehouses", inventoryRoutes);
 
+app.use("/warehouses", inventoryRoutes);
+app.use("/inventories", inventoryRoutes);
+
+// App listen
 app.listen(PORT, () => {
   console.log(`running at http://localhost:${PORT}`);
 });
 
+// Localhost home
 app.get("/", (req, res) => {
   res.json("Hi! You are approaching to get to Stocks API!!");
 });
