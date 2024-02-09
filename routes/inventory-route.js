@@ -10,5 +10,7 @@ router
   .get(inventoryController.inventoriesById)
   .put(inventoryController.editInventory);
 
+// For -----> POST /api/inventories
 router.route("/").post(inventoryController.postInventory);
+
 module.exports = router;
