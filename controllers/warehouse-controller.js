@@ -176,10 +176,31 @@ const updateWarehouse = async (req, res) => {
     });
   }
 };
+//Delete a single warehouse record
+const deleteWarehouse = async (req, res) => {
+  try {
+    const rowsDeleted = await knex("warehouses")
+      .where({ id: req.params.id })
+      .delete();
+
+    if (rowsDeleted === 0) {
+      return res
+        .status(404)
+        .json({ message: `User with ID ${req.params.id} not found` });
+    }
+    // No Content response
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to delete warehouse: ${error}`,
+    });
+  }
+};
 
 module.exports = {
   createWarehouse,
   updateWarehouse,
-  warehouseList, 
-  warehouseListById 
+  warehouseList,
+  warehouseListById,
+  deleteWarehouse
 };
