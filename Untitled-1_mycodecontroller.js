@@ -13,7 +13,7 @@ const warehouseListById = async (req, res) => {
     id: req.params.id,
   });
   try {
-    if (selectedwarehouseData.length > 0) {
+    if (selectedwarehouseData) {
       res.status(200).json(selectedwarehouseData);
     } else {
       res
