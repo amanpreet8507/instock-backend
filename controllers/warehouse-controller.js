@@ -176,6 +176,7 @@ const updateWarehouse = async (req, res) => {
     });
   }
 };
+
 //Delete a single warehouse record
 const deleteWarehouse = async (req, res) => {
   try {
