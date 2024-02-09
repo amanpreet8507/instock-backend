@@ -63,7 +63,7 @@ const createWarehouse = async (req, res) => {
       .where({ id: newWarehouseId[0] })
       .first();
 
-    res.status(200).json(newWarehouse);
+    res.status(201).json(newWarehouse);
   } catch (error) {
     res.status(500).json({
       message: `Unable to create a new warehouse: ${error}!`,
