@@ -1,6 +1,5 @@
 const knex = require("knex")(require("../knexfile"));
 
-<<<<<<< HEAD:controllers/warehouse-controller.js
 const warehouseList = async (req, res) => {
   try {
     const allWarehouseData = await knex("warehouses");
@@ -27,8 +26,7 @@ const warehouseListById = async (req, res) => {
       .json(`Error in retrieving the selected warehouse information: ${err}`);
   }
 };
-module.exports = { warehouseList, warehouseListById };
-=======
+
 const createWarehouse = async (req, res) => {
   try {
     // Destructuring values coming from req.body
@@ -182,5 +180,6 @@ const updateWarehouse = async (req, res) => {
 module.exports = {
   createWarehouse,
   updateWarehouse,
+  warehouseList, 
+  warehouseListById 
 };
->>>>>>> develop:contorllers/warehouse-controller.js

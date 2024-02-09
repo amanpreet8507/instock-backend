@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 5050;
 const inventoryRoutes = require("./routes/inventory-route");
 const warehouseRoutes = require("./routes/warehouse-route");
 
-app.use("/", warehouseRoutes);
+app.use("/warehouses", warehouseRoutes);
+app.use("/warehouses", inventoryRoutes)
 app.use("/inventories", inventoryRoutes);
 
 // App listen
