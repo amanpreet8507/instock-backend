@@ -198,7 +198,10 @@ const deleteInventory = async (req, res) => {
     });
   }
 };
-/* Get the list of all inventories*/
+
+// For -----> GET /api/inventories ************************************************************
+// FOR -----> GET the list of all inventories
+
 const allInventoriesList = async (req, res) => {
   try {
     const inventoriesArray = await knex("inventories");

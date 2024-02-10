@@ -11,7 +11,7 @@ router
   .put(inventoryController.editInventory)
   .delete(inventoryController.deleteInventory)
 
- // // For -----> GET, POST /api/inventories
+// For -----> GET, POST /api/inventories
 
 router.
 route("/")

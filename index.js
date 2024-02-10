@@ -14,7 +14,7 @@ const inventoryRoutes = require("./routes/inventory-route");
 const warehouseRoutes = require("./routes/warehouse-route");
 
 app.use("/warehouses", warehouseRoutes);
-app.use("/warehouses", inventoryRoutes)
+app.use("/warehouses", inventoryRoutes);
 app.use("/inventories", inventoryRoutes);
 
 // App listen
@@ -23,6 +23,13 @@ app.listen(PORT, () => {
 });
 
 // Localhost home
-app.get("/", (req, res) => {
-  res.json("Hi! You are approaching to get to Stocks API!!");
+app.get("/", (_req, res) => {
+  const apiEndpoints = {
+    warehouseList : "http://localhost:8080/warehouses   GET, POST",
+    warehouseByID: "http://localhost:8080/warehouses/:id    GET, PUT, DELETE",
+    inventoriesList: "http://localhost:8080/inventories   GET,POST",
+    inventoryById: "http://localhost:8080/inventories/:id   GET, PUT, DELETE",
+    getInventoriesOfParticularWarehouse:"http://localhost:8080/warehouses/:id/inventories   GET",
+  }
+  res.json(apiEndpoints);
 });
