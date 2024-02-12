@@ -11,7 +11,11 @@ router
   .put(inventoryController.editInventory)
   .delete(inventoryController.deleteInventory)
 
-// For -----> POST /api/inventories
-router.route("/").post(inventoryController.postInventory);
+// For -----> GET, POST /api/inventories
+
+router.
+route("/")
+.get(inventoryController.allInventoriesList)
+.post(inventoryController.postInventory);
 
 module.exports = router;
