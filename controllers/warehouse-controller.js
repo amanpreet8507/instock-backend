@@ -208,8 +208,8 @@ const deleteWarehouse = async (req, res) => {
 
 module.exports = {
   createWarehouse,
-  updateWarehouse,
   warehouseList,
   warehouseListById,
   deleteWarehouse,
+  updateWarehouse
 };
