@@ -1,5 +1,4 @@
 const { response } = require("express");
-
 const knex = require("knex")(require("../knexfile"));
 
 // FOR -----> GET /api/warehouses/:id/inventories ******************************************
@@ -128,38 +127,42 @@ const editInventory = async (req, res) => {
 // FOR -----> API to POST/INSERT or ADD an Inventory Item
 
 const postInventory = async (req, res) => {
+  console.log(req.body);
   try {
     // Destructuring values coming from req.body
     const { warehouse_id, item_name, description, category, status, quantity } =
       req.body;
+    // Ensure warehouse_id and quantity are integers
+    const warehouseId = parseInt(warehouse_id);
+    const quantityInt = parseInt(quantity);
 
-    // Checking if all properties exists in req.body to update the whole object
+    // Checking if all properties exist and are valid
     if (
-      !warehouse_id ||
+      isNaN(warehouseId) ||
       !item_name ||
       !description ||
       !category ||
       !status ||
-      !quantity
+      isNaN(quantityInt)
     ) {
       return res.status(400).json({
-        message:
-          "Please provide all properties for the inventory in the request",
+        message: "Please provide all required fields with valid values",
       });
     }
 
     // Inserting the new inventory into the knex
-    const newInventory = await knex("inventories").insert({
-      warehouse_id,
-      item_name,
-      description,
-      category,
-      status,
-      quantity: parseInt(quantity),
-    });
+    const newInventory = await knex("inventories")
+      .insert({
+        warehouse_id: warehouseId, // Use the parsed warehouse ID
+        item_name,
+        description,
+        category,
+        status,
+        quantity: quantityInt, // Use the parsed quantity
+      })
+      .returning("id"); // Ensure it returns the inserted ID
 
-    // ID of the new inventory created
-    const newInventoryId = newInventory[0];
+    const newInventoryId = newInventory[0]?.id || newInventory[0]; // Handle environments like SQLite vs PostgreSQL
 
     // Retrieving the created inventory from the database
     const createdInventory = await knex("inventories")
@@ -221,5 +224,5 @@ module.exports = {
   editInventory,
   postInventory,
   deleteInventory,
-  allInventoriesList
+  allInventoriesList,
 };

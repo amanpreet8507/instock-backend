@@ -66,7 +66,7 @@ const createWarehouse = async (req, res) => {
     }
 
     // check for the right format of the phone number e.g. +1 (123) 456-7890
-    const phoneRegex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+    const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(contact_phone)) {
       return res.status(400).json({
         message: "Please provide a valid phone number!",
