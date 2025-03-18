@@ -196,7 +196,7 @@ const deleteInventory = async (req, res) => {
     // No Content response
     res.sendStatus(204);
   } catch (error) {
-    response.status(400).json({
+    res.status(400).json({
       message: `Unable to delete inventory with id ${req.params.id}: ${error}`,
     });
   }

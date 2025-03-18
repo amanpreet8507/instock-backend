@@ -22,7 +22,7 @@ const warehouseListById = async (req, res) => {
   });
   try {
     if (selectedwarehouseData.length > 0) {
-      res.status(200).json(selectedwarehouseData);
+      res.status(200).json(selectedwarehouseData[0]);
     } else {
       res
         .status(404)
