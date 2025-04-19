@@ -1,7 +1,15 @@
-require("dotenv").config();
-const mysql = require("mysql2");
-const urlDB = `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
+require('dotenv').config();
+const knex = require('knex');
 
-const connection = mysql.createConnection(urlDB);
+const connection = knex({
+  client: 'mysql2',
+  connection: {
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    port: process.env.MYSQLPORT
+  }
+});
 
 module.exports = connection;
