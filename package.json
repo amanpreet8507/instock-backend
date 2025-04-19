@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "node index.js",
     "migrate": "knex migrate:latest",
-    "dev": "node index.js"
+    "seed": "knex seed:run",
+    "start:prod": "npm run migrate && npm run seed && node index.js"
   },
   "author": "",
   "license": "ISC",

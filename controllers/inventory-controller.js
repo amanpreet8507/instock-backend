@@ -1,4 +1,3 @@
-const { response } = require("express");
 const knex = require("../knexfile");
 
 // FOR -----> GET /api/warehouses/:id/inventories ******************************************
