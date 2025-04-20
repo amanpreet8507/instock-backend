@@ -7,7 +7,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cors());
 
-const PORT = 24955 || 5050;
+const PORT = 3306 || 5050;
 
 // Use routes
 const inventoryRoutes = require("./routes/inventory-route");
