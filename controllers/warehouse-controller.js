@@ -1,4 +1,4 @@
-const knex = (require("../knexfile"));
+const knex = (require("../db"));
 
 /*Get list of all warehouses */
 

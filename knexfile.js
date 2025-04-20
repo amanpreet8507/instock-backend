@@ -3,7 +3,7 @@ const knex = require('knex');
 
 module.exports = {
   production: {
-    client: 'pg',
+    client: 'mysql2',
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: './migrations',

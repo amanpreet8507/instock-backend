@@ -1,4 +1,4 @@
-const knex = require("../knexfile");
+const knex = require("../db");
 
 // FOR -----> GET /api/warehouses/:id/inventories ******************************************
 // FOR -----> API to GET Inventories for a Given Warehouse
